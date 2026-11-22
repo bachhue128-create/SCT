@@ -1,47 +1,60 @@
 ========================================================================================
-     FPT MVNO - HỆ THỐNG CẬP NHẬT TỰ ĐỘNG BẢNG VÀNG THI ĐUA SIM FPT 3 TUỔI
+     FPT MVNO - HỆ THỐNG CẬP NHẬT TỰ ĐỘNG BẢNG VÀNG THI ĐUA SIM FPT 3 TUỔI (SCT)
 ========================================================================================
 
-1. CẤU TRÚC THƯ MỤC:
-   ├── CHAY_CAP_NHAT.bat         <-- [CHÍNH] Bấm đúp vào file này để cập nhật Infographic
-   ├── input_data/               <-- Nơi bạn copy file Excel báo cáo hàng ngày vào đây
-   │   └── BaoCao_ThiDua_Sim.xlsx (File mẫu sẵn có số liệu thực tế)
-   ├── output/                   <-- Nơi nhận file ảnh và web sau khi cập nhật
-   │   ├── KetQua_ThiDua_Sim.png  <-- File ảnh nét cao (dùng gửi Zalo, Workplace, Email)
-   │   └── KetQua_ThiDua_Sim.html <-- File web tương tác (xem trên trình duyệt)
-   ├── template/                 <-- Mẫu thiết kế Infographic HTML/CSS cao cấp
-   └── scripts/                  <-- Bộ mã xử lý tự động (PowerShell + Python)
+1. CẤU TRÚC CÁC FILE CHẠY CHÍNH (NGOÀI THƯ MỤC GỐC):
+   ├── CHAY_CAP_NHAT.bat  <-- [CHÍNH] Nhấp đúp vào đây để cập nhật Infographic hàng ngày.
+   ├── KEO_LEN.bat        <-- [ĐẨY LÊN] Đẩy code & dữ liệu mới từ máy này lên GitHub.
+   ├── KEO_VE.bat         <-- [KÉO VỀ] Tải toàn bộ bản cập nhật mới nhất từ GitHub về máy.
+   ├── input_data/        <-- Thả file Excel báo cáo mới vào đây.
+   ├── output/            <-- Nơi nhận file ảnh nét cao (KetQua_ThiDua_Sim.png) và web.
+   ├── template/          <-- Mẫu giao diện & tài nguyên đồ họa Ultra-HD.
+   └── scripts/           <-- Bộ mã tự động hóa (PowerShell).
 
-2. CÁCH SỬ DỤNG MỖI NGÀY (CỰC KỲ ĐƠN GIẢN):
-   - Bước 1: Khi có file Excel số liệu mới, copy file Excel đó vào thư mục "input_data"
-             (Hệ thống tự động nhận diện file Excel mới nhất, không cần đổi tên file).
+----------------------------------------------------------------------------------------
+2. CÁCH SỬ DỤNG TRÊN MÁY THỨ 2 (HOẶC ĐỒNG BỘ GIỮA 2 MÁY):
+
+   👉 BƯỚC A: Cài đặt lần đầu trên Máy thứ 2
+      1. Trên Máy 2, mở trình duyệt vào link GitHub:
+         https://github.com/bachhue128-create/SCT
+      2. Bấm nút màu xanh "Code" -> Chọn "Download ZIP".
+      3. Giải nén file ZIP ra màn hình Desktop (đặt tên thư mục là SCT hoặc THI_DUA_SIM_FPT).
+      => Xong! Máy 2 đã có toàn bộ hệ thống sẵn sàng.
+
+   👉 BƯỚC B: Khi làm việc trên Máy 1 xong, muốn Máy 2 có dữ liệu mới:
+      - Trên Máy 1: Nhấp đúp vào file "KEO_LEN.bat" (Hệ thống tự động đẩy toàn bộ lên GitHub).
+      - Trên Máy 2: Nhấp đúp vào file "KEO_VE.bat" (Hệ thống tự động kéo bản mới nhất về).
+
+   👉 BƯỚC C: Ngược lại, nếu làm việc trên Máy 2 muốn chuyển sang Máy 1:
+      - Trên Máy 2: Nhấp đúp vào file "KEO_LEN.bat".
+      - Trên Máy 1: Nhấp đúp vào file "KEO_VE.bat".
+
+   * Lưu ý lần đầu bấm "KEO_LEN.bat" trên máy mới: 
+     Hệ thống sẽ hỏi mã Token 1 lần duy nhất, bạn chỉ cần dán mã token GitHub vào và Enter.
+     Những lần sau chỉ việc bấm đúp là xong, không cần nhập lại!
+
+----------------------------------------------------------------------------------------
+3. CÁCH CẬP NHẬT INFOGRAPHIC MỖI NGÀY:
+   - Bước 1: Copy file Excel số liệu mới vào thư mục "input_data" (tự nhận diện file mới nhất).
    - Bước 2: Bấm đúp chuột vào file "CHAY_CAP_NHAT.bat".
-   - Bước 3: Xem kết quả! Hệ thống sẽ tự động quét sheet "Thi đua Sim", tính toán xếp hạng,
-             tạo ra file ảnh "KetQua_ThiDua_Sim.png" và tự động mở lên màn hình.
+   - Bước 3: Xem kết quả! File ảnh "KetQua_ThiDua_Sim.png" tự động mở lên màn hình.
 
-3. NGUYÊN TẮC XÁC ĐỊNH GIẢI THƯỞNG (Sheet "Thi đua Sim"):
-   Theo đúng thể lệ chương trình Mừng sinh nhật 3 tuổi SIM FPT:
-   - HẠNG MỤC 1: VUA SIM (Cột D - SL SIM FPT)
-     + Shop có số lượng SIM bán nhiều nhất trong tháng.
-     + Top 2 shop (tô màu xanh lá): Đạt Giải Nhất (1.368.000đ) và Giải Nhì (666.000đ).
-     + Top 3 - 5 (tô màu vàng): Top bám đuổi quyết liệt.
+----------------------------------------------------------------------------------------
+4. NGUYÊN TẮC XÁC ĐỊNH GIẢI THƯỞNG (Sheet "Thi đua Sim"):
+   - HẠNG MỤC 1: VUA SIM (Cột D - SL SIM FPT bán nhiều nhất)
+     * Top 2 shop (xanh lá): Đạt Giải Nhất (1.368.000đ) và Giải Nhì (666.000đ).
+     * Top 3 - 5 (màu vàng): Top bám đuổi quyết liệt.
    
-   - HẠNG MỤC 2: CAO THỦ CHỐT SIM (Cột E - TỶ LỆ SIM)
-     + Shop có tỷ lệ khai thác SIM/Máy cao nhất trong tháng.
-     + Top 2 shop (tô màu xanh lá): Đạt Giải Nhất (1.368.000đ) và Giải Nhì (666.000đ).
-     + Top 3 - 5 (tô màu vàng): Top bám đuổi quyết liệt.
+   - HẠNG MỤC 2: CAO THỦ CHỐT SIM (Cột E - TỶ LỆ SIM / Máy cao nhất)
+     * Top 2 shop (xanh lá): Đạt Giải Nhất (1.368.000đ) và Giải Nhì (666.000đ).
+     * Top 3 - 5 (màu vàng): Top bám đuổi quyết liệt.
 
-   - HẠNG MỤC 3: BỨT PHÁ SIM (Cột F - TĂNG TRƯỞNG SV 2025)
-     + Shop có tỷ lệ tăng trưởng so với cùng kỳ năm 2025 cao nhất.
-     + Top 2 shop (tô màu xanh lá): Đạt Giải Nhất (1.368.000đ) và Giải Nhì (666.000đ).
-     + Top 3 - 5 (tô màu vàng): Top bám đuổi quyết liệt.
+   - HẠNG MỤC 3: BỨT PHÁ SIM (Cột F - TĂNG TRƯỞNG SV 2025 cao nhất)
+     * Top 2 shop (xanh lá): Đạt Giải Nhất (1.368.000đ) và Giải Nhì (666.000đ).
+     * Top 3 - 5 (màu vàng): Top bám đuổi quyết liệt.
 
-4. CƠ CẤU GIẢI THƯỞNG:
-   - Giải thưởng theo tháng (Tháng 11 & Tháng 12):
-     * Giải Nhất: 1.368.000đ
-     * Giải Nhì:  666.000đ
-   - Giải thưởng chung cuộc (Lũy kế 2 tháng):
-     * Giải Nhất: 2.888.000đ
-     * Giải Nhì:  999.000đ
-   - Tổng giá trị giải thưởng toàn chương trình: 23.865.000đ.
+5. CƠ CẤU GIẢI THƯỞNG:
+   - Giải tháng (T11 & T12): Nhất: 1.368.000đ | Nhì: 666.000đ (mỗi hạng mục).
+   - Giải chung cuộc (2 tháng): Nhất: 2.888.000đ | Nhì: 999.000đ.
+   - Tổng giá trị giải thưởng: 23.865.000đ.
 ========================================================================================

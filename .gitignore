@@ -1,3 +1,7 @@
+# Security & Secrets
+github_token.txt
+*token.txt
+
 # Temporary files
 *.tmp
 *.log
