@@ -1,0 +1,47 @@
+========================================================================================
+     FPT MVNO - HỆ THỐNG CẬP NHẬT TỰ ĐỘNG BẢNG VÀNG THI ĐUA SIM FPT 3 TUỔI
+========================================================================================
+
+1. CẤU TRÚC THƯ MỤC:
+   ├── CHAY_CAP_NHAT.bat         <-- [CHÍNH] Bấm đúp vào file này để cập nhật Infographic
+   ├── input_data/               <-- Nơi bạn copy file Excel báo cáo hàng ngày vào đây
+   │   └── BaoCao_ThiDua_Sim.xlsx (File mẫu sẵn có số liệu thực tế)
+   ├── output/                   <-- Nơi nhận file ảnh và web sau khi cập nhật
+   │   ├── KetQua_ThiDua_Sim.png  <-- File ảnh nét cao (dùng gửi Zalo, Workplace, Email)
+   │   └── KetQua_ThiDua_Sim.html <-- File web tương tác (xem trên trình duyệt)
+   ├── template/                 <-- Mẫu thiết kế Infographic HTML/CSS cao cấp
+   └── scripts/                  <-- Bộ mã xử lý tự động (PowerShell + Python)
+
+2. CÁCH SỬ DỤNG MỖI NGÀY (CỰC KỲ ĐƠN GIẢN):
+   - Bước 1: Khi có file Excel số liệu mới, copy file Excel đó vào thư mục "input_data"
+             (Hệ thống tự động nhận diện file Excel mới nhất, không cần đổi tên file).
+   - Bước 2: Bấm đúp chuột vào file "CHAY_CAP_NHAT.bat".
+   - Bước 3: Xem kết quả! Hệ thống sẽ tự động quét sheet "Thi đua Sim", tính toán xếp hạng,
+             tạo ra file ảnh "KetQua_ThiDua_Sim.png" và tự động mở lên màn hình.
+
+3. NGUYÊN TẮC XÁC ĐỊNH GIẢI THƯỞNG (Sheet "Thi đua Sim"):
+   Theo đúng thể lệ chương trình Mừng sinh nhật 3 tuổi SIM FPT:
+   - HẠNG MỤC 1: VUA SIM (Cột D - SL SIM FPT)
+     + Shop có số lượng SIM bán nhiều nhất trong tháng.
+     + Top 2 shop (tô màu xanh lá): Đạt Giải Nhất (1.368.000đ) và Giải Nhì (666.000đ).
+     + Top 3 - 5 (tô màu vàng): Top bám đuổi quyết liệt.
+   
+   - HẠNG MỤC 2: CAO THỦ CHỐT SIM (Cột E - TỶ LỆ SIM)
+     + Shop có tỷ lệ khai thác SIM/Máy cao nhất trong tháng.
+     + Top 2 shop (tô màu xanh lá): Đạt Giải Nhất (1.368.000đ) và Giải Nhì (666.000đ).
+     + Top 3 - 5 (tô màu vàng): Top bám đuổi quyết liệt.
+
+   - HẠNG MỤC 3: BỨT PHÁ SIM (Cột F - TĂNG TRƯỞNG SV 2025)
+     + Shop có tỷ lệ tăng trưởng so với cùng kỳ năm 2025 cao nhất.
+     + Top 2 shop (tô màu xanh lá): Đạt Giải Nhất (1.368.000đ) và Giải Nhì (666.000đ).
+     + Top 3 - 5 (tô màu vàng): Top bám đuổi quyết liệt.
+
+4. CƠ CẤU GIẢI THƯỞNG:
+   - Giải thưởng theo tháng (Tháng 11 & Tháng 12):
+     * Giải Nhất: 1.368.000đ
+     * Giải Nhì:  666.000đ
+   - Giải thưởng chung cuộc (Lũy kế 2 tháng):
+     * Giải Nhất: 2.888.000đ
+     * Giải Nhì:  999.000đ
+   - Tổng giá trị giải thưởng toàn chương trình: 23.865.000đ.
+========================================================================================

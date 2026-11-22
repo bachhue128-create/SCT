@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Vàng Thi Đua SIM FPT</title>
+    <style>
+        :root {
+            --primary: #0056b3;
+            --accent-orange: #ff6b00;
+            --accent-gold: #ffc107;
+            --gold-gradient: linear-gradient(135deg, #FFF8E1 0%, #FFD54F 40%, #FFA000 100%);
+            --silver-gradient: linear-gradient(135deg, #FFFFFF 0%, #ECEFF1 40%, #CFD8DC 100%);
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+            /* Harmonized background starting from banner's deep royal blue to bright celebratory cyan */
+            background: linear-gradient(180deg, #022589 0%, #0d3b9e 7%, #1a5ac7 16%, #2878e8 28%, #4295fa 44%, #60adfd 60%, #85c5fe 78%, #a8d9ff 92%, #c4e6ff 100%);
+            color: #1a202c;
+            width: 1200px;
+            height: 1360px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            padding: 0;
+        }
+
+        /* Ambient Glow */
+        .ambient-glow-center {
+            position: absolute;
+            top: 450px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 900px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.45) 0%, rgba(255, 215, 0, 0.15) 50%, transparent 75%);
+            filter: blur(60px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .main-wrapper {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        /* 1. SEAMLESS FULL-BLEED BANNER - CRISP & HIGH CONTRAST */
+        .banner-container {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            line-height: 0;
+            background: #022589;
+            box-shadow: 0 10px 30px rgba(0, 20, 80, 0.45);
+        }
+        .banner-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            image-rendering: -webkit-optimize-contrast;
+            filter: contrast(1.08) saturate(1.15) brightness(1.02);
+        }
+
+        /* CONTENT WRAPPER - BALANCED & SPACIOUS */
+        .content-area {
+            padding: 0 24px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        /* 2. DATE & STATUS STRIP (ĐẦU TRANG) */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 255, 255, 0.98);
+            border-radius: 40px;
+            padding: 7px 24px;
+            box-shadow: 0 6px 20px rgba(0, 70, 160, 0.16);
+            margin-top: 18px;
+            margin-bottom: 22px;
+        }
+        .pill-date {
+            background: linear-gradient(135deg, #0052cc 0%, #1e88e5 100%);
+            color: #ffffff;
+            font-size: 14.5px;
+            font-weight: 800;
+            padding: 5px 20px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 3px 10px rgba(0, 82, 204, 0.35);
+        }
+        .live-dot {
+            width: 9px;
+            height: 9px;
+            background: #00e676;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px #00e676;
+        }
+        .contest-phase-text {
+            color: #0b326d;
+            font-size: 16px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .pill-phase {
+            background: linear-gradient(135deg, #ff6b00 0%, #ff9e00 100%);
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 800;
+            padding: 5px 20px;
+            border-radius: 30px;
+            box-shadow: 0 3px 10px rgba(255, 107, 0, 0.35);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* 3. CATEGORIES SECTION (3 BẢNG THI ĐUA - RỘNG RÃI & TÁCH BẠCH) */
+        .category-supercard {
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(16px);
+            border: 2.5px solid rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 16px 20px 18px;
+            box-shadow: 0 14px 35px rgba(0, 75, 170, 0.18);
+            position: relative;
+            margin-bottom: 22px; /* KHOẢNG CÁCH ĐỒNG NHẤT 22PX ĐẾN BẢNG TIẾP THEO */
+        }
+        .supercard-header-badge {
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #0052cc 0%, #0099ff 100%);
+            border: 2px solid #ffffff;
+            color: white;
+            padding: 5px 28px;
+            border-radius: 30px;
+            font-size: 15.5px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            box-shadow: 0 5px 16px rgba(0, 82, 204, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        /* 3 BẢNG CÁCH NHAU RỘNG RÃI (GAP: 26PX) */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 26px; /* TĂNG KHOẢNG CÁCH GIỮA 3 BẢNG THEO YÊU CẦU */
+            margin-top: 10px;
+        }
+        .category-col {
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 8px 22px rgba(0, 70, 160, 0.12);
+            border: 2px solid rgba(220, 235, 252, 0.95);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Category Header Pills */
+        .cat-pill-head {
+            padding: 11px 10px;
+            text-align: center;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .cat-1 .cat-pill-head {
+            background: linear-gradient(135deg, #e91e63 0%, #ff5252 50%, #ff7043 100%);
+        }
+        .cat-2 .cat-pill-head {
+            background: linear-gradient(135deg, #0066cc 0%, #0288d1 50%, #00b0ff 100%);
+        }
+        .cat-3 .cat-pill-head {
+            background: linear-gradient(135deg, #00897b 0%, #2e7d32 50%, #43a047 100%);
+        }
+        .cat-head-row {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 18.5px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .cat-head-sub {
+            font-size: 11.5px;
+            font-weight: 600;
+            opacity: 0.95;
+            margin-top: 2px;
+        }
+
+        .cat-body {
+            padding: 11px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+            flex-grow: 1;
+        }
+
+        /* RANK 1 & RANK 2 CARDS */
+        .rank-card {
+            border-radius: 13px;
+            padding: 9px 12px;
+            position: relative;
+            border: 1.5px solid transparent;
+        }
+        .rank-top1 {
+            background: linear-gradient(135deg, #FFFDE7 0%, #FFF9C4 50%, #FFF59D 100%);
+            border-color: #FBC02D;
+            box-shadow: 0 4px 12px rgba(251, 192, 45, 0.28);
+        }
+        .rank-top2 {
+            background: linear-gradient(135deg, #F8FAFC 0%, #ECEFF1 50%, #CFD8DC 100%);
+            border-color: #90A4AE;
+            box-shadow: 0 3px 8px rgba(144, 164, 174, 0.22);
+        }
+        .rank-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3px;
+        }
+        .medal-badge {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 2px 9px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .rank-top1 .medal-badge {
+            background: var(--gold-gradient);
+            color: #794d00;
+            border: 1px solid #ffb300;
+        }
+        .rank-top2 .medal-badge {
+            background: var(--silver-gradient);
+            color: #37474F;
+            border: 1px solid #B0BEC5;
+        }
+        .prize-chip {
+            font-size: 11px;
+            font-weight: 800;
+            color: #d32f2f;
+            background: rgba(211, 47, 47, 0.08);
+            padding: 2px 7px;
+            border-radius: 6px;
+            border: 1px dashed #ef5350;
+        }
+        .shop-title {
+            font-size: 14.5px;
+            font-weight: 800;
+            color: #1a202c;
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+            line-height: 1.25;
+        }
+        .stat-metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            background: rgba(255, 255, 255, 0.92);
+            padding: 5px 10px;
+            border-radius: 7px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            margin-top: 3px;
+        }
+        .metric-label {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+        .metric-value {
+            font-size: 21px;
+            font-weight: 900;
+        }
+        .cat-1 .rank-top1 .metric-value { color: #d81b60; }
+        .cat-2 .rank-top1 .metric-value { color: #0288d1; }
+        .cat-3 .rank-top1 .metric-value { color: #2e7d32; }
+        .cat-1 .rank-top2 .metric-value { color: #e91e63; }
+        .cat-2 .rank-top2 .metric-value { color: #039be5; }
+        .cat-3 .rank-top2 .metric-value { color: #388e3c; }
+
+        .stat-detail {
+            font-size: 10.5px;
+            font-weight: 600;
+            color: #64748b;
+            text-align: right;
+            margin-top: 2px;
+        }
+
+        /* TOP 3-5 CHASER LIST */
+        .chaser-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 7px 9px;
+            border: 1px solid #e2e8f0;
+            margin-top: auto;
+        }
+        .chaser-box-title {
+            font-size: 10.5px;
+            font-weight: 800;
+            color: #b45309;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .chaser-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .chaser-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff;
+            padding: 3px 7px;
+            border-radius: 5px;
+            border: 1px solid #edf2f7;
+            font-size: 11.5px;
+        }
+        .chaser-rank-num {
+            font-weight: 800;
+            color: #b45309;
+            background: #fef3c7;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9.5px;
+            margin-right: 5px;
+            flex-shrink: 0;
+        }
+        .chaser-shop-name {
+            font-weight: 600;
+            color: #334155;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 160px;
+        }
+        .chaser-score {
+            font-weight: 800;
+            color: #0f172a;
+            margin-left: auto;
+            flex-shrink: 0;
+            padding-left: 4px;
+        }
+
+        /* 4. FULL-WIDTH PRIZE SUPERCARD (BẢNG CƠ CẤU KÉO RA TOÀN BỘ CHIỀU RỘNG TRANG) */
+        .prize-supercard-fullwidth {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(16px);
+            border: 2.5px solid rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 14px 22px 12px;
+            box-shadow: 0 12px 30px rgba(0, 75, 170, 0.16);
+            position: relative;
+            margin-bottom: 22px; /* KHOẢNG CÁCH ĐỒNG NHẤT 22PX ĐẾN DẢI BĂNG BÊN DƯỚI */
+        }
+        .prize-badge-title {
+            position: absolute;
+            top: -15px;
+            left: 28px;
+            background: linear-gradient(135deg, #7b1fa2 0%, #b388ff 100%);
+            border: 2px solid #ffffff;
+            color: white;
+            padding: 4px 22px;
+            border-radius: 30px;
+            font-size: 14.5px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 14px rgba(123, 31, 162, 0.35);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .prize-content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+        .prize-card-golden {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 8px 14px;
+            border: 1.5px solid #FFD54F;
+            box-shadow: 0 3px 10px rgba(255, 193, 7, 0.12);
+        }
+        .prize-card-title {
+            font-size: 12.5px;
+            font-weight: 800;
+            color: #b45309;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 1px solid #FEF3C7;
+            padding-bottom: 3px;
+        }
+        .prize-line {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12.5px;
+            padding: 2px 0;
+            font-weight: 600;
+            color: #475569;
+        }
+        .prize-money {
+            font-weight: 900;
+            color: #d32f2f;
+        }
+        
+        /* TOTAL PRIZE PILL ACROSS BOTTOM OF PRIZE CARD */
+        .total-prize-banner {
+            width: 100%;
+            background: linear-gradient(135deg, #fff8e1 0%, #ffffff 50%, #fff8e1 100%);
+            border: 2px solid #FFCA28;
+            border-radius: 30px;
+            padding: 5px 20px;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 900;
+            color: #B45309;
+            box-shadow: 0 4px 12px rgba(255, 179, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        .total-prize-banner strong {
+            color: #D32F2F;
+            font-size: 19.5px;
+            letter-spacing: 0.5px;
+        }
+
+        /* 5. NỘI DUNG TỰ TIN CHỐT SIM ĐƯA XUỐNG DƯỚI CÙNG (CÁCH 22PX) */
+        .bottom-motivation-strip {
+            width: 100%;
+            background: linear-gradient(135deg, #0f2b5c 0%, #173d7d 50%, #0d2652 100%);
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            border-radius: 20px;
+            padding: 10px 22px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            box-shadow: 0 8px 24px rgba(0, 30, 90, 0.3);
+            margin-bottom: 22px; /* KHOẢNG CÁCH ĐỒNG NHẤT 22PX ĐẾN ĐÁY ẢNH */
+        }
+        .mascot-avatar-small {
+            width: 50px;
+            height: 58px;
+            object-fit: contain;
+            filter: drop-shadow(0 3px 8px rgba(255, 140, 0, 0.4));
+            flex-shrink: 0;
+        }
+        .motivation-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex-grow: 1;
+        }
+        .motivation-title {
+            font-size: 15px;
+            font-weight: 900;
+            color: #FFD54F;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .motivation-subtext {
+            font-size: 12px;
+            color: #E2E8F0;
+            font-weight: 600;
+            margin-top: 1px;
+        }
+        .motivation-pill-badge {
+            background: linear-gradient(135deg, #ff6b00 0%, #ff9e00 100%);
+            color: #ffffff;
+            font-size: 12.5px;
+            font-weight: 800;
+            padding: 5px 16px;
+            border-radius: 20px;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(255, 107, 0, 0.4);
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-glow-center"></div>
+
+    <div class="main-wrapper">
+        
+        <!-- 1. FULL-BLEED SEAMLESS CAMPAIGN BANNER (HD SHARPENED) -->
+        <div class="banner-container">
+            <img class="banner-img" src="__HEADER_BANNER_BASE64__" alt="Mừng sinh nhật 3 tuổi SIM FPT - FPT MVNO">
+        </div>
+
+        <div class="content-area">
+            
+            <!-- 2. STATUS & DATE BAR (ĐẦU TRANG) -->
+            <div class="status-bar">
+                <div class="pill-date">
+                    <span class="live-dot"></span> CẬP NHẬT: <strong>__NGAY_CAP_NHAT__</strong>
+                </div>
+                <div class="contest-phase-text">
+                    ★ BẢNG VINH DANH HÀNG NGÀY ★
+                </div>
+                <div class="pill-phase">
+                    🔥 GIAI ĐOẠN 1: THÁNG 11/2026
+                </div>
+            </div>
+
+            <!-- 3. SUPERCARD 3 HẠNG MỤC THI ĐUA (KHOẢNG CÁCH RỘNG RÃI) -->
+            <div class="category-supercard">
+                <div class="supercard-header-badge">
+                    👑 3 HẠNG MỤC THI ĐUA • DẪN ĐẦU TOÀN QUỐC
+                </div>
+
+                <div class="category-grid">
+                    
+                    <!-- HẠNG MỤC 1: VUA SIM (SỐ LƯỢNG) -->
+                    <div class="category-col cat-1">
+                        <div class="cat-pill-head">
+                            <div class="cat-head-row">
+                                <span>👑</span> VUA SIM
+                            </div>
+                            <span class="cat-head-sub">Shop bán nhiều SIM FPT nhất</span>
+                        </div>
+                        <div class="cat-body">
+                            <!-- Top 1 -->
+                            <div class="rank-card rank-top1">
+                                <div class="rank-meta">
+                                    <span class="medal-badge">🥇 GIẢI NHẤT</span>
+                                    <span class="prize-chip">+1.368.000đ</span>
+                                </div>
+                                <div class="shop-title">__VUA_SIM_TOP1_NAME__</div>
+                                <div class="stat-metric-row">
+                                    <span class="metric-label">SẢN LƯỢNG</span>
+                                    <span class="metric-value">__VUA_SIM_TOP1_VALUE__</span>
+                                </div>
+                                <div class="stat-detail">Máy: __VUA_SIM_TOP1_MAY__ | Tỷ lệ: __VUA_SIM_TOP1_RATE__</div>
+                            </div>
+
+                            <!-- Top 2 -->
+                            <div class="rank-card rank-top2">
+                                <div class="rank-meta">
+                                    <span class="medal-badge">🥈 GIẢI NHÌ</span>
+                                    <span class="prize-chip">+666.000đ</span>
+                                </div>
+                                <div class="shop-title">__VUA_SIM_TOP2_NAME__</div>
+                                <div class="stat-metric-row">
+                                    <span class="metric-label">SẢN LƯỢNG</span>
+                                    <span class="metric-value">__VUA_SIM_TOP2_VALUE__</span>
+                                </div>
+                                <div class="stat-detail">Máy: __VUA_SIM_TOP2_MAY__ | Tỷ lệ: __VUA_SIM_TOP2_RATE__</div>
+                            </div>
+
+                            <!-- Top 3-5 Chasers -->
+                            <div class="chaser-box">
+                                <div class="chaser-box-title">⚡ TOP 3 - 5 BÁM ĐUỔI QUYẾT LIỆT</div>
+                                <div class="chaser-rows">
+                                    <div class="chaser-row">
+                                        <span class="chaser-rank-num">3</span>
+                                        <span class="chaser-shop-name">__VUA_SIM_TOP3_NAME__</span>
+                                        <span class="chaser-score">__VUA_SIM_TOP3_VALUE__</span>
+                                    </div>
+                                    <div class="chaser-row">
+                                        <span class="chaser-rank-num">4</span>
+                                        <span class="chaser-shop-name">__VUA_SIM_TOP4_NAME__</span>
+                                        <span class="chaser-score">__VUA_SIM_TOP4_VALUE__</span>
+                                    </div>
+                                    <div class="chaser-row">
+                                        <span class="chaser-rank-num">5</span>
+                                        <span class="chaser-shop-name">__VUA_SIM_TOP5_NAME__</span>
+                                        <span class="chaser-score">__VUA_SIM_TOP5_VALUE__</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HẠNG MỤC 2: CAO THỦ CHỐT SIM (TỶ LỆ) -->
+                    <div class="category-col cat-2">
+                        <div class="cat-pill-head">
+                            <div class="cat-head-row">
+                                <span>🎯</span> CAO THỦ CHỐT SIM
+                            </div>
+                            <span class="cat-head-sub">Tỷ lệ SIM / Máy cao nhất</span>
+                        </div>
+                        <div class="cat-body">
+                            <!-- Top 1 -->
+                            <div class="rank-card rank-top1">
+                                <div class="rank-meta">
+                                    <span class="medal-badge">🥇 GIẢI NHẤT</span>
+                                    <span class="prize-chip">+1.368.000đ</span>
+                                </div>
+                                <div class="shop-title">__TY_LE_TOP1_NAME__</div>
+                                <div class="stat-metric-row">
+                                    <span class="metric-label">TỶ LỆ KHAI THÁC</span>
+                                    <span class="metric-value">__TY_LE_TOP1_VALUE__</span>
+                                </div>
+                                <div class="stat-detail">SIM: __TY_LE_TOP1_SIM__ | Máy: __TY_LE_TOP1_MAY__</div>
+                            </div>
+
+                            <!-- Top 2 -->
+                            <div class="rank-card rank-top2">
+                                <div class="rank-meta">
+                                    <span class="medal-badge">🥈 GIẢI NHÌ</span>
+                                    <span class="prize-chip">+666.000đ</span>
+                                </div>
+                                <div class="shop-title">__TY_LE_TOP2_NAME__</div>
+                                <div class="stat-metric-row">
+                                    <span class="metric-label">TỶ LỆ KHAI THÁC</span>
+                                    <span class="metric-value">__TY_LE_TOP2_VALUE__</span>
+                                </div>
+                                <div class="stat-detail">SIM: __TY_LE_TOP2_SIM__ | Máy: __TY_LE_TOP2_MAY__</div>
+                            </div>
+
+                            <!-- Top 3-5 Chasers -->
+                            <div class="chaser-box">
+                                <div class="chaser-box-title">⚡ TOP 3 - 5 BÁM ĐUỔI QUYẾT LIỆT</div>
+                                <div class="chaser-rows">
+                                    <div class="chaser-row">
+                                        <span class="chaser-rank-num">3</span>
+                                        <span class="chaser-shop-name">__TY_LE_TOP3_NAME__</span>
+                                        <span class="chaser-score">__TY_LE_TOP3_VALUE__</span>
+                                    </div>
+                                    <div class="chaser-row">
+                                        <span class="chaser-rank-num">4</span>
+                                        <span class="chaser-shop-name">__TY_LE_TOP4_NAME__</span>
+                                        <span class="chaser-score">__TY_LE_TOP4_VALUE__</span>
+                                    </div>
+                                    <div class="chaser-row">
+                                        <span class="chaser-rank-num">5</span>
+                                        <span class="chaser-shop-name">__TY_LE_TOP5_NAME__</span>
+                                        <span class="chaser-score">__TY_LE_TOP5_VALUE__</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HẠNG MỤC 3: BỨT PHÁ SIM (TĂNG TRƯỞNG) -->
+                    <div class="category-col cat-3">
+                        <div class="cat-pill-head">
+                            <div class="cat-head-row">
+                                <span>📈</span> BỨT PHÁ SIM
+                            </div>
+                            <span class="cat-head-sub">Tăng trưởng so với cùng kỳ 2025</span>
+                        </div>
+                        <div class="cat-body">
+                            <!-- Top 1 -->
+                            <div class="rank-card rank-top1">
+                                <div class="rank-meta">
+                                    <span class="medal-badge">🥇 GIẢI NHẤT</span>
+                                    <span class="prize-chip">+1.368.000đ</span>
+                                </div>
+                                <div class="shop-title">__TANG_TRUONG_TOP1_NAME__</div>
+                                <div class="stat-metric-row">
+                                    <span class="metric-label">TĂNG TRƯỞNG</span>
+                                    <span class="metric-value">__TANG_TRUONG_TOP1_VALUE__</span>
+                                </div>
+                                <div class="stat-detail">SL SIM: __TANG_TRUONG_TOP1_SIM__ | Tỷ lệ: __TANG_TRUONG_TOP1_RATE__</div>
+                            </div>
+
+                            <!-- Top 2 -->
+                            <div class="rank-card rank-top2">
+                                <div class="rank-meta">
+                                    <span class="medal-badge">🥈 GIẢI NHÌ</span>
+                                    <span class="prize-chip">+666.000đ</span>
+                                </div>
+                                <div class="shop-title">__TANG_TRUONG_TOP2_NAME__</div>
+                                <div class="stat-metric-row">
+                                    <span class="metric-label">TĂNG TRƯỞNG</span>
+                                    <span class="metric-value">__TANG_TRUONG_TOP2_VALUE__</span>
+                                </div>
+                                <div class="stat-detail">SL SIM: __TANG_TRUONG_TOP2_SIM__ | Tỷ lệ: __TANG_TRUONG_TOP2_RATE__</div>
+                            </div>
+
+                            <!-- Top 3-5 Chasers -->
+                            <div class="chaser-box">
+                                <div class="chaser-box-title">⚡ TOP 3 - 5 BÁM ĐUỔI QUYẾT LIỆT</div>
+                                <div class="chaser-rows">
+                                    <div class="chaser-row">
+                                        <span class="chaser-rank-num">3</span>
+                                        <span class="chaser-shop-name">__TANG_TRUONG_TOP3_NAME__</span>
+                                        <span class="chaser-score">__TANG_TRUONG_TOP3_VALUE__</span>
+                                    </div>
+                                    <div class="chaser-row">
+                                        <span class="chaser-rank-num">4</span>
+                                        <span class="chaser-shop-name">__TANG_TRUONG_TOP4_NAME__</span>
+                                        <span class="chaser-score">__TANG_TRUONG_TOP4_VALUE__</span>
+                                    </div>
+                                    <div class="chaser-row">
+                                        <span class="chaser-rank-num">5</span>
+                                        <span class="chaser-shop-name">__TANG_TRUONG_TOP5_NAME__</span>
+                                        <span class="chaser-score">__TANG_TRUONG_TOP5_VALUE__</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 4. BẢNG CƠ CẤU GIẢI THƯỞNG KÉO DÀI TOÀN TRANG (FULL-WIDTH, CÁCH 18PX) -->
+            <div class="prize-supercard-fullwidth">
+                <div class="prize-badge-title">
+                    🎁 CƠ CẤU GIẢI THƯỞNG THI ĐUA
+                </div>
+
+                <div class="prize-content-grid">
+                    <!-- Giải tháng -->
+                    <div class="prize-card-golden">
+                        <div class="prize-card-title">
+                            <span>📅</span> GIẢI THƯỞNG THEO THÁNG (T11 & T12)
+                        </div>
+                        <div class="prize-line">
+                            <span>🥇 Giải Nhất (mỗi hạng mục):</span>
+                            <span class="prize-money">1.368.000đ</span>
+                        </div>
+                        <div class="prize-line">
+                            <span>🥈 Giải Nhì (mỗi hạng mục):</span>
+                            <span class="prize-money">666.000đ</span>
+                        </div>
+                    </div>
+
+                    <!-- Giải chung cuộc -->
+                    <div class="prize-card-golden">
+                        <div class="prize-card-title">
+                            <span>🏆</span> GIẢI CHUNG CUỘC (LŨY KẾ 2T)
+                        </div>
+                        <div class="prize-line">
+                            <span>🥇 Giải Nhất Chung cuộc:</span>
+                            <span class="prize-money">2.888.000đ</span>
+                        </div>
+                        <div class="prize-line">
+                            <span>🥈 Giải Nhì Chung cuộc:</span>
+                            <span class="prize-money">999.000đ</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Prize Pill across bottom of card -->
+                <div class="total-prize-banner">
+                    <span>★ TỔNG GIÁ TRỊ GIẢI THƯỞNG:</span>
+                    <strong>23.865.000đ</strong>
+                    <span>★</span>
+                </div>
+            </div>
+
+            <!-- 5. NỘI DUNG TỰ TIN CHỐT SIM ĐƯA XUỐNG DƯỚI CÙNG (CÁCH 18PX) -->
+            <div class="bottom-motivation-strip">
+                <img class="mascot-avatar-small" src="__MASCOT_BASE64__" alt="Mascot SIM FPT">
+                <div class="motivation-content">
+                    <div class="motivation-title">
+                        <span>🚀</span> TỰ TIN CHỐT SIM - BỨT PHÁ VỀ ĐÍCH!
+                    </div>
+                    <div class="motivation-subtext">
+                        Cơ hội chia đều cho tất cả các Shop • Tư vấn SIM FPT kèm mỗi máy bán ra để nhân đôi doanh số và ghi danh Bảng Vàng!
+                    </div>
+                </div>
+                <div class="motivation-pill-badge">
+                    QUYẾT TÂM VỀ ĐÍCH! 🔥
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
