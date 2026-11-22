@@ -399,7 +399,7 @@ if ($browserPath) {
         "--screenshot=$outPngPath",
         "--no-sandbox",
         "--disable-gpu",
-        "--window-size=1200,1360",
+        "--window-size=1200,1370",
         "--hide-scrollbars",
         "$outHtmlPath"
     )
