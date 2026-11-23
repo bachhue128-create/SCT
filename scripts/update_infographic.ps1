@@ -217,6 +217,15 @@ $tyLeTop = $tyLeRank | Select-Object -First 5
 $tangTruongRank = $shops | Sort-Object TangTruong -Descending
 $tangTruongTop = $tangTruongRank | Select-Object -First 5
 
+# 4B. TỔNG HỢP CHỈ SỐ CỘT C & CỘT D TOÀN QUỐC
+$totalSim = 0
+$totalMay = 0
+foreach ($s in $shops) {
+    $totalSim += $s.SLSim
+    $totalMay += $s.SLMay
+}
+$totalRate = if ($totalMay -gt 0) { $totalSim / $totalMay } else { 0 }
+
 # Helper định dạng số
 function Format-Number([double]$num) {
     return [string]::Format("{0:N0}", $num)
@@ -229,7 +238,14 @@ function Format-Percent([double]$num, [bool]$showSign = $false) {
 }
 
 # 5. IN KẾT QUẢ RA BẢNG CONSOLE
-Write-Host "`n=== 👑 HẠNG MỤC 1: VUA SIM (SỐ LƯỢNG) ===" -ForegroundColor Red
+Write-Host "
+=== 🌟 CHỈ SỐ TOÀN QUỐC HÀNG NGÀY (CỘT C & CỘT D) ===" -ForegroundColor Yellow
+Write-Host "  * Tổng SIM FPT (Cột D)        : $(Format-Number $totalSim) SIM" -ForegroundColor Cyan
+Write-Host "  * Tổng Máy tính SIM (Cột C)   : $(Format-Number $totalMay) Máy" -ForegroundColor Cyan
+Write-Host "  * Tỷ lệ khai thác toàn quốc   : $(Format-Percent $totalRate)" -ForegroundColor Green
+
+Write-Host "
+=== 👑 HẠNG MỤC 1: VUA SIM (SỐ LƯỢNG) ===" -ForegroundColor Red
 Write-Host "  [GIẢI NHẤT] 1. $($vuaSimTop[0].Shop) : $(Format-Number $vuaSimTop[0].SLSim) SIM (Tỷ lệ: $(Format-Percent $vuaSimTop[0].TLSim))" -ForegroundColor Green
 Write-Host "  [GIẢI NHÌ]  2. $($vuaSimTop[1].Shop) : $(Format-Number $vuaSimTop[1].SLSim) SIM (Tỷ lệ: $(Format-Percent $vuaSimTop[1].TLSim))" -ForegroundColor Green
 Write-Host "  [BÁM ĐUỔI]  3. $($vuaSimTop[2].Shop) : $(Format-Number $vuaSimTop[2].SLSim) SIM" -ForegroundColor Yellow
@@ -284,6 +300,11 @@ $replacements = @{
     "__MASCOT_BASE64__"        = $mascotB64
     "__NGAY_CAP_NHAT__"        = $reportDate
     
+    # Chỉ số Cột C & Cột D toàn quốc
+    "__TONG_SL_SIM__"          = Format-Number $totalSim
+    "__TONG_SL_MAY__"          = Format-Number $totalMay
+    "__TONG_TY_LE__"           = Format-Percent $totalRate
+    
     # Hạng mục 1: VUA SIM
     "__VUA_SIM_TOP1_NAME__"  = $vuaSimTop[0].Shop
     "__VUA_SIM_TOP1_VALUE__" = (Format-Number $vuaSimTop[0].SLSim) + " SIM"
@@ -301,6 +322,9 @@ $replacements = @{
     "__VUA_SIM_TOP4_VALUE__" = (Format-Number $vuaSimTop[3].SLSim) + " SIM"
     "__VUA_SIM_TOP5_NAME__"  = $vuaSimTop[4].Shop
     "__VUA_SIM_TOP5_VALUE__" = (Format-Number $vuaSimTop[4].SLSim) + " SIM"
+    "__VUA_SIM_TOP3_MAY__"   = Format-Number $vuaSimTop[2].SLMay
+    "__VUA_SIM_TOP4_MAY__"   = Format-Number $vuaSimTop[3].SLMay
+    "__VUA_SIM_TOP5_MAY__"   = Format-Number $vuaSimTop[4].SLMay
 
     # Hạng mục 2: CAO THỦ CHỐT SIM
     "__TY_LE_TOP1_NAME__"  = $tyLeTop[0].Shop
@@ -319,24 +343,40 @@ $replacements = @{
     "__TY_LE_TOP4_VALUE__" = Format-Percent $tyLeTop[3].TLSim
     "__TY_LE_TOP5_NAME__"  = $tyLeTop[4].Shop
     "__TY_LE_TOP5_VALUE__" = Format-Percent $tyLeTop[4].TLSim
+    "__TY_LE_TOP3_SIM__"   = Format-Number $tyLeTop[2].SLSim
+    "__TY_LE_TOP3_MAY__"   = Format-Number $tyLeTop[2].SLMay
+    "__TY_LE_TOP4_SIM__"   = Format-Number $tyLeTop[3].SLSim
+    "__TY_LE_TOP4_MAY__"   = Format-Number $tyLeTop[3].SLMay
+    "__TY_LE_TOP5_SIM__"   = Format-Number $tyLeTop[4].SLSim
+    "__TY_LE_TOP5_MAY__"   = Format-Number $tyLeTop[4].SLMay
 
     # Hạng mục 3: BỨT PHÁ SIM
     "__TANG_TRUONG_TOP1_NAME__"  = $tangTruongTop[0].Shop
     "__TANG_TRUONG_TOP1_VALUE__" = Format-Percent $tangTruongTop[0].TangTruong $true
     "__TANG_TRUONG_TOP1_SIM__"   = (Format-Number $tangTruongTop[0].SLSim) + " SIM"
+    "__TANG_TRUONG_TOP1_MAY__"   = Format-Number $tangTruongTop[0].SLMay
     "__TANG_TRUONG_TOP1_RATE__"  = Format-Percent $tangTruongTop[0].TLSim
     
     "__TANG_TRUONG_TOP2_NAME__"  = $tangTruongTop[1].Shop
     "__TANG_TRUONG_TOP2_VALUE__" = Format-Percent $tangTruongTop[1].TangTruong $true
     "__TANG_TRUONG_TOP2_SIM__"   = (Format-Number $tangTruongTop[1].SLSim) + " SIM"
+    "__TANG_TRUONG_TOP2_MAY__"   = Format-Number $tangTruongTop[1].SLMay
     "__TANG_TRUONG_TOP2_RATE__"  = Format-Percent $tangTruongTop[1].TLSim
     
     "__TANG_TRUONG_TOP3_NAME__"  = $tangTruongTop[2].Shop
     "__TANG_TRUONG_TOP3_VALUE__" = Format-Percent $tangTruongTop[2].TangTruong $true
+    "__TANG_TRUONG_TOP3_SIM__"   = Format-Number $tangTruongTop[2].SLSim
+    "__TANG_TRUONG_TOP3_MAY__"   = Format-Number $tangTruongTop[2].SLMay
+
     "__TANG_TRUONG_TOP4_NAME__"  = $tangTruongTop[3].Shop
     "__TANG_TRUONG_TOP4_VALUE__" = Format-Percent $tangTruongTop[3].TangTruong $true
+    "__TANG_TRUONG_TOP4_SIM__"   = Format-Number $tangTruongTop[3].SLSim
+    "__TANG_TRUONG_TOP4_MAY__"   = Format-Number $tangTruongTop[3].SLMay
+
     "__TANG_TRUONG_TOP5_NAME__"  = $tangTruongTop[4].Shop
     "__TANG_TRUONG_TOP5_VALUE__" = Format-Percent $tangTruongTop[4].TangTruong $true
+    "__TANG_TRUONG_TOP5_SIM__"   = Format-Number $tangTruongTop[4].SLSim
+    "__TANG_TRUONG_TOP5_MAY__"   = Format-Number $tangTruongTop[4].SLMay
 }
 
 $outputHtmlContent = $htmlTemplate
@@ -399,7 +439,7 @@ if ($browserPath) {
         "--screenshot=$outPngPath",
         "--no-sandbox",
         "--disable-gpu",
-        "--window-size=1200,1370",
+        "--window-size=1200,1460",
         "--hide-scrollbars",
         "$outHtmlPath"
     )
