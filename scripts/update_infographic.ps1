@@ -461,7 +461,7 @@ foreach ($browserPath in $browsers) {
         "--screenshot=$tempPngPath",
         "--no-sandbox",
         "--disable-gpu",
-        "--window-size=1200,1460",
+        "--window-size=1200,1370",
         "--hide-scrollbars",
         $htmlUri
     )
