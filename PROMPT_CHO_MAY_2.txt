@@ -1,0 +1,53 @@
+# ==============================================================================
+# HƯỚNG DẪN TIẾP TỤC CUỘC TRÒ CHUYỆN & DỰ ÁN TRÊN MÁY 2
+# ==============================================================================
+
+Bạn đang tiếp tục phát triển dự án "BẢNG VÀNG THI ĐUA SIM FPT 3 TUỔI".
+Dự án được đồng bộ qua GitHub: https://github.com/bachhue128-create/SCT
+
+--------------------------------------------------------------------------------
+1. CÁCH 1: NẾU MÁY 2 CÓ CÀI GOOGLE ANTIGRAVITY
+--------------------------------------------------------------------------------
+- Trường hợp A (Dùng chung tài khoản Google):
+  Mở Antigravity trên Máy 2 -> Nhìn vào thanh menu bên trái (Sidebar) -> Bấm vào tên cuộc trò chuyện này để tiếp tục trao đổi trực tiếp.
+
+- Trường hợp B (Mở cuộc trò chuyện mới hoặc tạo Workspace mới trên Máy 2):
+  1. Mở Antigravity -> Chọn "Open Folder" (Mở thư mục) trỏ tới thư mục dự án trên Desktop:
+     C:\Users\NH-HUENTB2\Desktop\THI DUA SIM FPT\THI DUA SIM
+  2. Copy và dán câu lệnh sau vào khung chat của Antigravity trên Máy 2:
+     "Hãy đọc file PROMPT_CHO_MAY_2.txt và tiếp tục hỗ trợ tôi điều chỉnh dự án Thi đua SIM FPT này."
+
+--------------------------------------------------------------------------------
+2. CÁCH 2: SAO CHÉP TRỰC TIẾP LỊCH SỬ CHAT SANG MÁY 2
+--------------------------------------------------------------------------------
+Nếu muốn mang toàn bộ lịch sử trò chuyện nguyên bản từ Máy 1 sang Máy 2:
+- Trên Máy 1, copy thư mục:
+  C:\Users\Hue_Laptop\.gemini\antigravity\brain\b78de785-d3e7-49c6-bc65-bba07a21379c
+- Sang Máy 2, paste vào đúng đường dẫn tương ứng:
+  C:\Users\NH-HUENTB2\.gemini\antigravity\brain\b78de785-d3e7-49c6-bc65-bba07a21379c
+Sau đó khởi động lại Antigravity trên Máy 2, cuộc trò chuyện sẽ xuất hiện nguyên vẹn trong danh sách!
+
+--------------------------------------------------------------------------------
+3. TÓM TẮT DỰ ÁN DÀNH CHO AI TRÊN MÁY 2 (NGỮ CẢNH ĐẦY ĐỦ)
+--------------------------------------------------------------------------------
+- Thư mục chính: THI DUA SIM FPT
+- Dữ liệu đầu vào: Thư mục `input_data/` chứa file Excel (ví dụ: `Báo cáo tổng hợp PKDV đến 22.11.xlsx`), lấy dữ liệu từ sheet "Thi đua Sim".
+- 3 Hạng mục thi đua:
+  1. VUA SIM: Cột D (SL SIM FPT) - Hiển thị cả SIM và Số Máy (Cột C).
+  2. CAO THỦ CHỐT SIM: Cột E (Tỷ lệ SIM/Máy) - Hiển thị Tỷ lệ kèm SIM và Số Máy.
+  3. BỨT PHÁ SIM: Cột F (Tăng trưởng so với cùng kỳ 2025) - Hiển thị Tăng trưởng kèm SIM, Máy và Tỷ lệ.
+  * Cả Top 1, Top 2 và Top 3-5 bám đuổi đều hiển thị chi tiết chỉ số Cột C và Cột D.
+- Quy chuẩn thiết kế Infographic:
+  - Kích thước: 1200 x 1370px, bố cục cân xứng hài hòa.
+  - Banner tiêu đề: Ultra-HD tràn viền (1200px) nhúng Base64, không bị cắt góc.
+  - Font tiêu đề lớn, huy chương vàng bạc nổi bật (+1.368.000đ, +666.000đ).
+  - Bảng cơ cấu giải thưởng Full-width (23.865.000đ).
+  - Không hiển thị thanh chỉ số tổng hợp ở giữa (đã gỡ bỏ).
+- Quy chuẩn xuất file:
+  - Chỉ xuất DUY NHẤT 1 file ảnh PNG trong thư mục `output/KetQua_ThiDua_Sim.png`.
+  - Không lưu file HTML trong thư mục output.
+  - Hỗ trợ đường dẫn có dấu cách và chống xung đột khóa file Excel.
+- Các công cụ một chạm:
+  - `CHAY_CAP_NHAT.bat`: Tự động tính toán, xếp hạng và render ảnh PNG.
+  - `KEO_LEN.bat`: Đẩy code lên GitHub https://github.com/bachhue128-create/SCT.
+  - `KEO_VE.bat`: Kéo bản mới nhất từ GitHub về máy.
