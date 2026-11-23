@@ -46,7 +46,27 @@ $shops = @()
 $reportDate = ""
 
 if ($targetFile.EndsWith(".xlsx", [System.StringComparison]::OrdinalIgnoreCase)) {
-    $zip = [System.IO.Compression.ZipFile]::OpenRead($targetFile)
+    $tempCopy = Join-Path $env:TEMP ("excel_read_" + [Guid]::NewGuid().ToString("N") + ".xlsx")
+    $zip = $null
+    try {
+        # Dùng FileShare.ReadWrite để copy và đọc được file ngay cả khi người dùng đang mở xem trong Excel
+        $fsSrc = New-Object System.IO.FileStream($targetFile, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Read, [System.IO.FileShare]::ReadWrite)
+        $fsDst = New-Object System.IO.FileStream($tempCopy, [System.IO.FileMode]::Create, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
+        $fsSrc.CopyTo($fsDst)
+        $fsSrc.Close()
+        $fsDst.Close()
+        $zip = [System.IO.Compression.ZipFile]::OpenRead($tempCopy)
+    } catch {
+        Write-Host "`n======================================================================" -ForegroundColor Red
+        Write-Host " [LỖI TRUY CẬP FILE EXCEL] Không thể đọc được file Excel!" -ForegroundColor Red
+        Write-Host " File: $(Split-Path -Leaf $targetFile)" -ForegroundColor Yellow
+        Write-Host " Nguyên nhân: File Excel đang bị khóa (có thể do đang mở trong Excel hoặc đang lưu)." -ForegroundColor Yellow
+        Write-Host " -> GIẢI PHÁP: VUI LÒNG ĐÓNG FILE EXCEL LẠI RỒI CHẠY LẠI FILE BAT!" -ForegroundColor Green
+        Write-Host "======================================================================" -ForegroundColor Red
+        if (Test-Path $tempCopy) { Remove-Item $tempCopy -Force -ErrorAction SilentlyContinue }
+        pause
+        exit 1
+    }
     
     # Đọc workbook.xml để tìm sheet "Thi đua Sim"
     $wbEntry = $zip.GetEntry("xl/workbook.xml")
@@ -60,7 +80,9 @@ if ($targetFile.EndsWith(".xlsx", [System.StringComparison]::OrdinalIgnoreCase))
 
     if (-not $sheetTargetNode) {
         Write-Host "[LỖI] Không tìm thấy sheet 'Thi đua Sim' trong file Excel!" -ForegroundColor Red
-        $zip.Dispose()
+        if ($zip) { $zip.Dispose() }
+        if (Test-Path $tempCopy) { Remove-Item $tempCopy -Force -ErrorAction SilentlyContinue }
+        pause
         exit 1
     }
     
@@ -115,7 +137,8 @@ if ($targetFile.EndsWith(".xlsx", [System.StringComparison]::OrdinalIgnoreCase))
     $sheetReader = New-Object System.IO.StreamReader($sheetEntry.Open())
     $sheetXml = [xml]$sheetReader.ReadToEnd()
     $sheetReader.Close()
-    $zip.Dispose()
+    if ($zip) { $zip.Dispose() }
+    if (Test-Path $tempCopy) { Remove-Item $tempCopy -Force -ErrorAction SilentlyContinue }
 
     # Phân tích từng dòng dữ liệu (từ dòng 4 trở đi)
     foreach ($r in $sheetXml.worksheet.sheetData.row) {
