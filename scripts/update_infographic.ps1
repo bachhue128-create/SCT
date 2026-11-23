@@ -407,86 +407,99 @@ foreach ($key in $replacements.Keys) {
     $outputHtmlContent = $outputHtmlContent.Replace($key, $replacements[$key])
 }
 
-$outHtmlPath = Join-Path $OutputDir "KetQua_ThiDua_Sim.html"
-[System.IO.File]::WriteAllText($outHtmlPath, $outputHtmlContent, [System.Text.Encoding]::UTF8)
-Write-Host "      Đã lưu: $outHtmlPath" -ForegroundColor DarkCyan
+# Tạo file HTML tạm trong thư mục TEMP (để render ảnh, không lưu lại file HTML trong thư mục output theo yêu cầu)
+$tempHtmlPath = Join-Path $env:TEMP ("KetQua_ThiDua_Sim_" + [Guid]::NewGuid().ToString("N") + ".html")
+[System.IO.File]::WriteAllText($tempHtmlPath, $outputHtmlContent, [System.Text.Encoding]::UTF8)
 
-# 7. TÌM TRÌNH DUYỆT CHROME HOẶC EDGE LINH HOẠT TRÊN MỌI MÁY
+# Xóa bất kỳ file HTML nào còn tồn tại trong thư mục output (chỉ giữ đúng 1 file PNG)
+Get-ChildItem -Path $OutputDir -Filter "*.html" -File -ErrorAction SilentlyContinue | Remove-Item -Force -ErrorAction SilentlyContinue
+
+# 7. RENDER ẢNH INFOGRAPHIC (HỖ TRỢ ĐƯỜNG DẪN CÓ DẤU CÁCH & TỰ ĐỘNG CHUYỂN ĐỔI TRÌNH DUYỆT)
 Write-Host "[4/4] Đang render ảnh Infographic chất lượng cao (PNG)..." -ForegroundColor Green
 $outPngPath = Join-Path $OutputDir "KetQua_ThiDua_Sim.png"
+$tempPngPath = Join-Path $env:TEMP ("render_" + [Guid]::NewGuid().ToString("N") + ".png")
 
-function Get-HeadlessBrowser {
-    # 1. Quét Registry App Paths
-    $regPaths = @(
-        "HKLM:\Software\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe",
-        "HKLM:\Software\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe",
-        "HKCU:\Software\Microsoft\Windows\CurrentVersion\App Paths\chrome.exe",
-        "HKCU:\Software\Microsoft\Windows\CurrentVersion\App Paths\msedge.exe"
-    )
-    foreach ($r in $regPaths) {
-        if (Test-Path $r) {
-            $p = (Get-ItemProperty $r -ErrorAction SilentlyContinue).'(default)'
-            if ($p -and (Test-Path $p)) { return $p }
-        }
-    }
+# Chuẩn hóa đường dẫn HTML thành file:// URI có mã hóa %20 để không bị lỗi dấu cách
+$htmlUri = [System.Uri]::new($tempHtmlPath).AbsoluteUri
 
-    # 2. Quét các đường dẫn cài đặt thông dụng (64-bit, 32-bit, LocalAppData)
+function Get-AvailableBrowsers {
+    $list = @()
     $candidates = @(
         "C:\Program Files\Google\Chrome\Application\chrome.exe",
         "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
-        "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
-        "C:\Program Files\Microsoft\Edge\Application\msedge.exe",
         "$env:LOCALAPPDATA\Google\Chrome\Application\chrome.exe",
-        "$env:LOCALAPPDATA\Microsoft\Edge\Application\msedge.exe",
         "$env:ProgramFiles\Google\Chrome\Application\chrome.exe",
         "${env:ProgramFiles(x86)}\Google\Chrome\Application\chrome.exe",
-        "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe"
+        "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+        "C:\Program Files\Microsoft\Edge\Application\msedge.exe",
+        "$env:LOCALAPPDATA\Microsoft\Edge\Application\msedge.exe",
+        "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe",
+        "$env:ProgramFiles\Microsoft\Edge\Application\msedge.exe"
     )
     foreach ($c in $candidates) {
-        if ($c -and (Test-Path $c)) { return $c }
+        if ($c -and (Test-Path $c) -and -not ($list -contains $c)) { $list += $c }
     }
-
-    # 3. Quét lệnh hệ thống
-    $cmd = Get-Command chrome.exe, msedge.exe -ErrorAction SilentlyContinue | Select-Object -First 1
-    if ($cmd) { return $cmd.Source }
-
-    return $null
+    $cmds = Get-Command chrome.exe, msedge.exe -ErrorAction SilentlyContinue
+    if ($cmds) {
+        foreach ($m in $cmds) {
+            if ($m.Source -and -not ($list -contains $m.Source)) { $list += $m.Source }
+        }
+    }
+    return $list
 }
 
-$browserPath = Get-HeadlessBrowser
+$browsers = Get-AvailableBrowsers
+$renderSuccess = $false
 
-if ($browserPath) {
-    Write-Host "      Sử dụng trình duyệt: $(Split-Path -Leaf $browserPath)" -ForegroundColor DarkCyan
+foreach ($browserPath in $browsers) {
+    $bName = Split-Path -Leaf $browserPath
+    Write-Host "      Đang chụp ảnh với trình duyệt: $bName" -ForegroundColor DarkCyan
+    
+    # Render ra file tạm không có dấu cách trong tên thư mục
     $browserArgs = @(
         "--headless",
-        "--screenshot=$outPngPath",
+        "--screenshot=$tempPngPath",
         "--no-sandbox",
         "--disable-gpu",
         "--window-size=1200,1460",
         "--hide-scrollbars",
-        "$outHtmlPath"
+        $htmlUri
     )
-    $p = Start-Process -FilePath $browserPath -ArgumentList $browserArgs -Wait -PassThru -NoNewWindow
-    if (Test-Path $outPngPath) {
-        # Xóa các file copy thừa (nếu có) để chỉ giữ đúng 1 file ảnh duy nhất
-        Get-ChildItem -Path $OutputDir -Filter "*MoiNhat*.png" -File -ErrorAction SilentlyContinue | Remove-Item -Force -ErrorAction SilentlyContinue
-
-        # Đồng bộ sang thư mục Brain để hiển thị trực tiếp trong báo cáo
-        $brainArtifact = "C:\Users\Hue_Laptop\.gemini\antigravity\brain\b78de785-d3e7-49c6-bc65-bba07a21379c\KetQua_ThiDua_Sim.png"
-        Copy-Item $outPngPath $brainArtifact -Force -ErrorAction SilentlyContinue
-
-        $fileSize = [math]::Round(((Get-Item $outPngPath).Length / 1KB), 1)
-        Write-Host "`n======================================================================" -ForegroundColor Green
-        Write-Host " [THÀNH CÔNG] ĐÃ XUẤT 1 FILE ẢNH INFOGRAPHIC DUY NHẤT RÕ NÉT NHẤT!" -ForegroundColor Green
-        Write-Host " File ảnh: $outPngPath ($fileSize KB)" -ForegroundColor Yellow
-        Write-Host " File web: $outHtmlPath" -ForegroundColor Yellow
-        Write-Host "======================================================================" -ForegroundColor Green
+    
+    try {
+        $p = Start-Process -FilePath $browserPath -ArgumentList $browserArgs -Wait -PassThru -NoNewWindow
+        Start-Sleep -Milliseconds 600
         
-        # Tự động mở ảnh cho người dùng xem
-        Start-Process $outPngPath
-    } else {
-        Write-Host "[CẢNH BÁO] Không thể tạo file PNG, nhưng file HTML đã được tạo thành công: $outHtmlPath" -ForegroundColor Yellow
-    }
+        if (Test-Path $tempPngPath) {
+            Copy-Item $tempPngPath $outPngPath -Force
+            Remove-Item $tempPngPath -Force -ErrorAction SilentlyContinue
+            $renderSuccess = $true
+            break
+        }
+    } catch {}
+}
+
+# Dọn dẹp file HTML tạm
+Remove-Item $tempHtmlPath -Force -ErrorAction SilentlyContinue
+
+if ($renderSuccess -and (Test-Path $outPngPath)) {
+    # XÓA TOÀN BỘ FILE THỪA TRONG OUTPUT - CHỈ GIỮ LẠI ĐÚNG 1 FILE PNG THEO YÊU CẦU
+    Get-ChildItem -Path $OutputDir -File | Where-Object { $_.Name -ne "KetQua_ThiDua_Sim.png" } | Remove-Item -Force -ErrorAction SilentlyContinue
+
+    # Đồng bộ sang thư mục Brain để hiển thị trực tiếp trong báo cáo
+    $brainArtifact = "C:\Users\Hue_Laptop\.gemini\antigravity\brain\b78de785-d3e7-49c6-bc65-bba07a21379c\KetQua_ThiDua_Sim.png"
+    Copy-Item $outPngPath $brainArtifact -Force -ErrorAction SilentlyContinue
+
+    $fileSize = [math]::Round(((Get-Item $outPngPath).Length / 1KB), 1)
+    Write-Host "`n======================================================================" -ForegroundColor Green
+    Write-Host " [THÀNH CÔNG] ĐÃ XUẤT 1 FILE ẢNH PNG DUY NHẤT RÕ NÉT (KHÔNG XUẤT HTML)!" -ForegroundColor Green
+    Write-Host " File ảnh duy nhất: $outPngPath ($fileSize KB)" -ForegroundColor Yellow
+    Write-Host "======================================================================" -ForegroundColor Green
+    
+    # Tự động mở ảnh cho người dùng xem
+    Start-Process $outPngPath
 } else {
-    Write-Host "[LƯU Ý] Không tìm thấy Chrome/Edge để tự động chụp ảnh PNG. Vui lòng mở file HTML trong trình duyệt: $outHtmlPath" -ForegroundColor Yellow
+    Write-Host "`n[LỖI] Không thể chụp ảnh tự động. Vui lòng kiểm tra trình duyệt Chrome hoặc Microsoft Edge!" -ForegroundColor Red
+    pause
+    exit 1
 }
